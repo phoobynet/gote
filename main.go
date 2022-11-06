@@ -4,7 +4,7 @@ import (
 	"embed"
 	_ "embed"
 	"flag"
-	"fmt"
+	"github.com/common-nighthawk/go-figure"
 	"io"
 	"log"
 	"os"
@@ -35,7 +35,6 @@ type application struct {
 }
 
 func copyDir(root string, destination string) {
-	println(root)
 	currentDir, err := src.ReadDir(root)
 
 	if err != nil {
@@ -64,12 +63,12 @@ func copyDir(root string, destination string) {
 		if writeFileErr != nil {
 			log.Fatal(writeFileErr)
 		}
-
-		fmt.Printf("Copied %s to %s\n", sourceFilePath, destinationFilePath)
 	}
 }
 
 func main() {
+	myFigure := figure.NewColorFigure("GOTE", "", "blue", true)
+	myFigure.Print()
 	var cfg configuration
 	flag.StringVar(&cfg.projectName, "project", "", "project name")
 	flag.Parse()
