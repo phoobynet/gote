@@ -207,6 +207,21 @@ func (app *application) installTailwind() {
 
 	app.runNPMInstall(true, devDeps...)
 
+	tf, tfErr := os.Create("tailwind.config.cjs")
+	if tfErr != nil {
+		log.Fatal(tfErr)
+	}
+
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(tf)
+
+	_, copyErr := io.Copy(tf, strings.NewReader(tailwindConfig))
+
+	if copyErr != nil {
+		log.Fatal(copyErr)
+	}
+
 	cmd := exec.Command("npx", "tailwindcss", "init", "-p")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -232,20 +247,5 @@ func (app *application) runNPMInstall(isDev bool, libraries ...string) {
 	cmdErr := cmd.Run()
 	if cmdErr != nil {
 		log.Fatal(cmdErr)
-	}
-
-	tf, tfErr := os.Create("tailwind.config.cjs")
-	if tfErr != nil {
-		log.Fatal(tfErr)
-	}
-
-	defer func(f *os.File) {
-		_ = f.Close()
-	}(tf)
-
-	_, copyErr := io.Copy(tf, strings.NewReader(tailwindConfig))
-
-	if copyErr != nil {
-		log.Fatal(copyErr)
 	}
 }
