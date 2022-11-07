@@ -6,5 +6,17 @@ Uses Vite to create a React application with a router, ESLint, Prettier and Tail
 
 ```bash
 go get github.com/phoobynet/gote
-go install github.com/phoobynet/gote
+go install
+```
+
+## Creating a new project
+
+```bash
+gote --project my-project
+```
+
+```bash
+cd my-project
+
+npm run dev
 ```
