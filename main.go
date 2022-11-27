@@ -22,6 +22,9 @@ var prettierrc string
 //go:embed tailwind.config.cjs
 var tailwindConfig string
 
+//go:embed vite.config.cjs
+var viteConfig string
+
 //go:embed src
 var src embed.FS
 
@@ -108,6 +111,21 @@ func (app *application) runVite() {
 
 	if cmdErr != nil {
 		log.Fatal(cmdErr)
+	}
+
+	vc, vcErr := os.Create("vite.config.cjs")
+	if vcErr != nil {
+		log.Fatal(vcErr)
+	}
+
+	defer func(f *os.File) {
+		_ = f.Close()
+	}(vc)
+
+	_, copyErr := io.Copy(vc, strings.NewReader(viteConfig))
+
+	if copyErr != nil {
+		log.Fatal(copyErr)
 	}
 }
 
@@ -229,7 +247,6 @@ func (app *application) installTailwind() {
 	if cmdErr != nil {
 		log.Fatal(cmdErr)
 	}
-
 }
 
 func (app *application) runNPMInstall(isDev bool, libraries ...string) {
